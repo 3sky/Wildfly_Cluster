@@ -1,0 +1,5 @@
+- hosts: myserver1
+  sudo: true
+  tasks:
+    - name: install apache
+      yum: name=httpd state=present
