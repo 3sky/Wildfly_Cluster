@@ -1,5 +1,5 @@
-- hosts = ["myserver2","myserver3"]
+- hosts: all
   sudo: true
   tasks:
     - name: install apache
-      yum: name=httpd state=present
+      apt: name=apache2 state=present

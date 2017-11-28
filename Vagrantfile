@@ -4,7 +4,7 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "Berkshelf-CentOS-6.3-x86_64-minimal"
+  config.vm.box = "debian/jessie64"
   config.vm.define "myserver1" do |myserver1|
    myserver1.vm.hostname = "myserver1"
    myserver1.vm.network :private_network, ip: "33.33.33.31"
