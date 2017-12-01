@@ -1,5 +1,0 @@
-- hosts: all
-  sudo: true
-  tasks:
-    - name: install apache
-      apt: name=apache2 state=present

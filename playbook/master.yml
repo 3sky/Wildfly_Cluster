@@ -1,7 +1,0 @@
-- hosts: myserver1
-  sudo: true
-  tasks:
-    - name: install apache
-      apt: name=apache2 state=present
-    - name: install vim
-      apt: name=vim state=present  
