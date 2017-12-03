@@ -1,43 +1,43 @@
-- hosts: master:nodes
-  sudo: true
-  tasks:
-    - name: install vim
-      apt: name=vim state=present
-
-    - name: Generating RSA key for vagrant
-      apt: name=vagrant generate_ssh_key=yes  
-
-
-- hosts: nodes
-  sudo: true
-  tasks:
-    - name: install apache2
-      apt: name=apache2 state=present
-
-
 - hosts: master
   sudo: true
   tasks:
-    - name: install python3
-      apt: name=python3 state=present
+    - name: Install java 8 preresequesits
+      apt: 
+        name: python-software-properties
 
-    # - name: Generating RSA key for vagrant
-    #   user: name=vagrant generate_ssh_key=yes
+    - name: Add Java 8 repository
+      apt_repository: repo='ppa:webupd8team/java' state=present
 
-    # - name: Downloading pub key
-    #   fetch: src=/vagrant/.ssh/id_rsa.pub dest=/tmp/id_rsa.tmp flat=yes
+    - name: Agree to oracle license
+      debconf: 
+        name: oracle-java8-installer 
+        question: shared/accepted-oracle-license-v1-1 
+        vtype: select 
+        value: true
 
-    # - name: Copying local key to 33.33.33.32
-    #   local_action: shell cat /tmp/id_rsa.tmp | ssh vagrant@33.33.33.32 "cat >> /vagrant/.ssh/authorized_keys"
+    - name: Install Java 8
+      apt: 
+        name: oracle-java8-installer 
+        force: yes
+    - name: Jenkins - Add key
+      apt_key: 
+        url: https://pkg.jenkins.io/debian/jenkins.io.key 
+        state: present 
 
-    # - name: Coping local key to 33.33.33.33
-    #   local_action: shell cat /tmp/id_rsa.tmp | ssh vagrant@33.33.33.33 "cat >> /vagrant/.ssh/authorized_keys"
+    - name: Jenkins - Add repo  
+      apt_repository:
+        repo: deb http://pkg.jenkins-ci.org/debian-stable binary/
+        state: present
+        update_cache: yes
+      
+    - name: Jenkins - Install  
+      apt: 
+        name: jenkins 
+        state: present
+        update_cache: yes
 
-    # - name: Deleting temporal files
-    #   local_action: file  path=/tmp/id_rsa.tmp state=absent
-
-    # - name: Removing temporal keys from 33.33.33.32
-    #   shell: ssh vagrant@33.33.33.32  'sed -i "/ansible-generated/d" /vagrant/.ssh/authorized_keys'
-
-    # - name: Removing temporal keys from 33.33.33.33
-    #   shell: ssh vagrant@33.33.33.33  'sed -i "/ansible-generated/d" /vagrant/.ssh/authorized_keys'
+# - hosts: master:nodes
+#   sudo: true
+#   tasks:
+#     - name: install vim
+#       apt: name=vim state=present
