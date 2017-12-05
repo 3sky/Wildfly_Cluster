@@ -4,7 +4,7 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "debian/jessie64"
+  config.vm.box = "debian/stretch64"
   config.ssh.forward_agent = true
 
   # config.vm.define "myserver2" do |myserver2|
@@ -24,7 +24,6 @@ Vagrant.configure("2") do |config|
    end
 
   config.vm.provision "ansible_local" do |ansible|
-    ansible.galaxy_command = 'ansible-galaxy install -p roles geerlingguy.jenkins'
     ansible.playbook = "playbook/playbook.yml"
     ansible.groups = {
       "master" => ["myserver1"],

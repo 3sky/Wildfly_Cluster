@@ -1,40 +1,10 @@
 - hosts: master
   sudo: true
   tasks:
-    - name: Install java 8 preresequesits
-      apt: 
-        name: python-software-properties
+     - name: install vim
+       apt: name=vim state=present
 
-    - name: Add Java 8 repository
-      apt_repository: repo='ppa:webupd8team/java' state=present
-
-    - name: Agree to oracle license
-      debconf: 
-        name: oracle-java8-installer 
-        question: shared/accepted-oracle-license-v1-1 
-        vtype: select 
-        value: true
-
-    - name: Install Java 8
-      apt: 
-        name: oracle-java8-installer 
-        force: yes
-    - name: Jenkins - Add key
-      apt_key: 
-        url: https://pkg.jenkins.io/debian/jenkins.io.key 
-        state: present 
-
-    - name: Jenkins - Add repo  
-      apt_repository:
-        repo: deb http://pkg.jenkins-ci.org/debian-stable binary/
-        state: present
-        update_cache: yes
-      
-    - name: Jenkins - Install  
-      apt: 
-        name: jenkins 
-        state: present
-        update_cache: yes
+- include: jenkins/java_and_jenkins.yml
 
 # - hosts: master:nodes
 #   sudo: true
