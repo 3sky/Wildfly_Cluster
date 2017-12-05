@@ -21,6 +21,11 @@ Vagrant.configure("2") do |config|
     myserver1.vm.hostname = "myserver1"
     myserver1.vm.network :private_network, ip: "33.33.33.31"
     myserver1.vm.network "forwarded_port", guest: 8080, host: 8080
+    myserver1.vm.network "forwarded_port", guest: 9990, host: 9990
+    myserver1.vm.network "forwarded_port", guest: 9999, host: 9999
+    myserver1.vm.network "public_network"
+    myserver1.vm.synced_folder "wild_src", "/wild_src" #set up vmPath/opt
+    myserver1.vbguest.auto_update = true
    end
 
   config.vm.provision "ansible_local" do |ansible|

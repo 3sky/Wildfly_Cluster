@@ -1,0 +1,60 @@
+- hosts: master
+  sudo: true
+  tasks:
+    - name: Download wildly.9
+      get_url:
+        url: http://download.jboss.org/wildfly/9.0.0.Final/servlet/wildfly-servlet-9.0.0.Final.tar.gz
+        dest: /wild_src/wildfly-servlet-9.0.0.Final.tar.gz
+    
+    - name: Create /opt/wild_src
+      file: 
+        path: /opt/wild_src 
+        state: directory
+        owner: root
+
+    - name: Extract Wildfly
+      unarchive:
+        src: /wild_src/wildfly-servlet-9.0.0.Final.tar.gz
+        dest: /opt/wild_src
+
+    - name: Add group "wildfly"
+      group: 
+        name: wildfly
+
+    - name: Add user "wildfly"
+      user: 
+        name: wildfly 
+        group: wildfly 
+        home: /opt/wild_src
+
+    - name: Create /domain/log
+      file: 
+        path: /opt/wild_src/wildfly-servlet-9.0.0.Final/domain/log
+        state: directory
+        owner: root
+
+    - name: Create /domain/servers
+      file: 
+        path: /opt/wild_src/wildfly-servlet-9.0.0.Final/domain/servers
+        state: directory
+        owner: root    
+    
+    - name: Change ownership of Wildlfy installation
+      file: 
+        path:  /opt/wild_src/
+        owner: wildfly 
+        group: wildfly 
+        state: directory 
+        recurse: yes
+
+    - name: Copy the init script
+      copy: 
+        src: /opt/wild_src/wildfly-servlet-9.0.0.Final/bin/domain.sh 
+        dest: /etc/init.d/wildfly 
+        mode: 0755
+
+    - name: Enable JBoss to be started at boot
+      service: 
+        name: wildfly
+        enabled: yes 
+        state: started
