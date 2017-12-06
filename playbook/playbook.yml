@@ -1,8 +1,8 @@
 - hosts: master
   sudo: true
-  tasks:
-     - name: install curl
-       apt: name=curl state=present
+  # tasks:
+  #    - name: install curl
+  #      apt: name=curl state=present
 
 - include: java/java_install.yml
 - include: wildfly/wildfly.yml

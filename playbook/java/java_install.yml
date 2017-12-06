@@ -1,6 +1,22 @@
 - hosts: master
   sudo: true
   tasks:
+    - name: Download jdk
+      get_url:
+        url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz
+        dest: /jdk_src/
+        headers: "Cookie:oraclelicense=accept-securebackup-cookie"
+        validate_certs: no
+        timeout: 300
+
+    - name: Download jre
+      get_url:
+        url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jre-8u151-linux-x64.tar.gz
+        dest: /jre_src/
+        headers: "Cookie:oraclelicense=accept-securebackup-cookie"
+        validate_certs: no
+        timeout: 300        
+
     - name: Create /opt/jdk
       file: 
         path: /opt/jdk 
@@ -12,21 +28,15 @@
         path: /opt/jre 
         state: directory
         owner: root
-
-    - name: Download JDK
-      command: 'wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz -P /opt/jdk/'
      
     - name: Extract JDK
       unarchive:
-        src: /opt/jdk/jdk-8u151-linux-x64.tar.gz
+        src: /jdk_src/jdk-8u151-linux-x64.tar.gz
         dest: /opt/jdk
 
-    - name: Download JRE
-      command: 'wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jre-8u151-linux-x64.tar.gz -P /opt/jre/'
-     
     - name: Extract JRE
       unarchive:
-        src: /opt/jre/jre-8u151-linux-x64.tar.gz
+        src: /jre_src/jre-8u151-linux-x64.tar.gz
         dest: /opt/jre
 
     - name: correct java version selected
@@ -34,3 +44,11 @@
 
     - name: correct javac version selected
       command: 'update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_151/bin/javac 100'
+
+
+    # - name: Download JDK
+    #   command: 'wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz -P /jdk_src/'
+    
+    # - name: Download JRE
+    #   command: 'wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jre-8u151-linux-x64.tar.gz -P /jre_src/'
+     

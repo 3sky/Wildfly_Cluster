@@ -1,3 +1,5 @@
 .vagrant
 playbook/playbook_pubkey.yml
-wild_src/wildfly-servlet-9.0.0.Final.tar.gz
+src/wild_src/wildfly-servlet-9.0.0.Final.tar.gz
+src/jdk_src/jdk-8u151-linux-x64.tar.gz
+src/jre_src/jre-8u151-linux-x64.tar.gz

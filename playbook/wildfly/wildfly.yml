@@ -31,13 +31,13 @@
       file: 
         path: /opt/wild_src/wildfly-servlet-9.0.0.Final/domain/log
         state: directory
-        owner: root
+        owner: wildfly
 
     - name: Create /domain/servers
       file: 
         path: /opt/wild_src/wildfly-servlet-9.0.0.Final/domain/servers
         state: directory
-        owner: root    
+        owner: wildfly    
     
     - name: Change ownership of Wildlfy installation
       file: 
@@ -49,11 +49,11 @@
 
     - name: Copy the init script
       copy: 
-        src: /opt/wild_src/wildfly-servlet-9.0.0.Final/bin/domain.sh 
+        src: /opt/wild_src/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh 
         dest: /etc/init.d/wildfly 
         mode: 0755
 
-    - name: Enable JBoss to be started at boot
+    - name: Enable Wildfly to be started at boot
       service: 
         name: wildfly
         enabled: yes 
