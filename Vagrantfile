@@ -25,7 +25,8 @@ Vagrant.configure("2") do |config|
     myserver1.vm.network "public_network"
     myserver1.vm.synced_folder "src/wild_src", "/wild_src"
     myserver1.vm.synced_folder "src/jdk_src", "/jdk_src"
-    myserver1.vm.synced_folder "src/jre_src", "/jre_src" #set up vmPath/opt
+    myserver1.vm.synced_folder "src/jre_src", "/jre_src" 
+    myserver1.vm.synced_folder "config", "/config"
     myserver1.vbguest.auto_update = true
    end
 

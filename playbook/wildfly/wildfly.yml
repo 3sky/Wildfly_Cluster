@@ -6,16 +6,16 @@
         url: http://download.jboss.org/wildfly/9.0.0.Final/servlet/wildfly-servlet-9.0.0.Final.tar.gz
         dest: /wild_src/wildfly-servlet-9.0.0.Final.tar.gz
     
-    - name: Create /opt/wild_src
-      file: 
-        path: /opt/wild_src 
-        state: directory
-        owner: root
+    # - name: Create /opt/wildfly
+    #   file: 
+    #     path: /opt/wildfly 
+    #     state: directory
+    #     owner: root
 
     - name: Extract Wildfly
       unarchive:
         src: /wild_src/wildfly-servlet-9.0.0.Final.tar.gz
-        dest: /opt/wild_src
+        dest: /opt/
 
     - name: Add group "wildfly"
       group: 
@@ -25,23 +25,22 @@
       user: 
         name: wildfly 
         group: wildfly 
-        home: /opt/wild_src
 
     - name: Create /domain/log
       file: 
-        path: /opt/wild_src/wildfly-servlet-9.0.0.Final/domain/log
+        path: /opt/wildfly-servlet-9.0.0.Final/domain/log
         state: directory
         owner: wildfly
 
     - name: Create /domain/servers
       file: 
-        path: /opt/wild_src/wildfly-servlet-9.0.0.Final/domain/servers
+        path: /opt/wildfly-servlet-9.0.0.Final/domain/servers
         state: directory
         owner: wildfly    
     
     - name: Change ownership of Wildlfy installation
       file: 
-        path:  /opt/wild_src/
+        path:  /opt/wildfly-servlet-9.0.0.Final/
         owner: wildfly 
         group: wildfly 
         state: directory 
@@ -49,9 +48,16 @@
 
     - name: Copy the init script
       copy: 
-        src: /opt/wild_src/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh 
+        src: /opt/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh 
         dest: /etc/init.d/wildfly 
         mode: 0755
+
+    - name: Create symlink
+      file: 
+        src: /opt/wildfly-servlet-9.0.0.Final 
+        dest: /opt/wildfly
+        state: link
+        force: true
 
     - name: Enable Wildfly to be started at boot
       service: 
