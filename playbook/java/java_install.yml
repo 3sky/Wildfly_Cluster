@@ -1,21 +1,21 @@
 - hosts: master
   sudo: true
   tasks:
-    - name: Download jdk
-      get_url:
-        url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz
-        dest: /jdk_src/
-        headers: "Cookie:oraclelicense=accept-securebackup-cookie"
-        validate_certs: no
-        timeout: 300
+    # - name: Download jdk
+    #   get_url:
+    #     url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz
+    #     dest: /jdk_src/
+    #     headers: "Cookie:oraclelicense=accept-securebackup-cookie"
+    #     validate_certs: no
+    #     timeout: 300
 
-    - name: Download jre
-      get_url:
-        url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jre-8u151-linux-x64.tar.gz
-        dest: /jre_src/
-        headers: "Cookie:oraclelicense=accept-securebackup-cookie"
-        validate_certs: no
-        timeout: 300        
+    # - name: Download jre
+    #   get_url:
+    #     url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jre-8u151-linux-x64.tar.gz
+    #     dest: /jre_src/
+    #     headers: "Cookie:oraclelicense=accept-securebackup-cookie"
+    #     validate_certs: no
+    #     timeout: 300        
 
     - name: Create /opt/jdk
       file: 

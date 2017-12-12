@@ -46,11 +46,19 @@
         state: directory 
         recurse: yes
 
+    - name: Edit init script
+      replace:
+        name: /opt/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh
+        regexp: 'JBOSS_MODE=standalone'
+        replace: 'JBOSS_MODE=domain'
+
+#TODO problem with raplace line in config, it should start in domain mode not stanalone
+
     - name: Copy the init script
       copy: 
         src: /opt/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh 
         dest: /etc/init.d/wildfly 
-        mode: 0755
+        mode: 0755    
 
     - name: Create symlink
       file: 
@@ -58,6 +66,15 @@
         dest: /opt/wildfly
         state: link
         force: true
+
+    - name: bck config file
+      command: mv /opt/wildfly/domain/configuration/host.xml /opt/wildfly/domain/configuration/host_bck.xml
+
+    - name: Copy config file
+      copy: 
+        src: /config/master/host.xml
+        dest: /opt/wildfly/domain/configuration/host.xml 
+        mode: 0755
 
     - name: Enable Wildfly to be started at boot
       service: 
