@@ -1,16 +1,10 @@
-- hosts: master
+- hosts: master:nodes
   sudo: true
   tasks:
     - name: Download wildly.9
       get_url:
         url: http://download.jboss.org/wildfly/9.0.0.Final/servlet/wildfly-servlet-9.0.0.Final.tar.gz
         dest: /wild_src/wildfly-servlet-9.0.0.Final.tar.gz
-    
-    # - name: Create /opt/wildfly
-    #   file: 
-    #     path: /opt/wildfly 
-    #     state: directory
-    #     owner: root
 
     - name: Extract Wildfly
       unarchive:
@@ -52,8 +46,6 @@
         regexp: 'JBOSS_MODE=standalone'
         replace: 'JBOSS_MODE=domain'
 
-#TODO problem with raplace line in config, it should start in domain mode not stanalone
-
     - name: Copy the init script
       copy: 
         src: /opt/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh 
@@ -70,12 +62,44 @@
     - name: bck config file
       command: mv /opt/wildfly/domain/configuration/host.xml /opt/wildfly/domain/configuration/host_bck.xml
 
+- hosts: master
+  sudo: true
+  tasks:
     - name: Copy config file
       copy: 
         src: /config/master/host.xml
         dest: /opt/wildfly/domain/configuration/host.xml 
         mode: 0755
 
+    - name: Add user admin
+      lineinfile:
+        dest: /opt/wildfly/domain/configuration/mgmt-users.properties
+        line: "{{ item.line }}"
+      with_items:
+        - { line: 'admin=8b719b83947927205e7f4969a4c8514e' }
+        - { line: 'slave=8a2a93e7cfefaa1a3ca0d69dfd3e692b' }
+
+- hosts: myserver2
+  sudo: true
+  tasks:
+    - name: Copy config file
+      copy: 
+        src: /config/slaves/host_one.xml
+        dest: /opt/wildfly/domain/configuration/host.xml 
+        mode: 0755
+
+- hosts: myserver3
+  sudo: true
+  tasks:
+    - name: Copy config file
+      copy: 
+        src: /config/slaves/host_two.xml
+        dest: /opt/wildfly/domain/configuration/host.xml 
+        mode: 0755
+
+- hosts: master:nodes
+  sudo: true
+  tasks:
     - name: Enable Wildfly to be started at boot
       service: 
         name: wildfly

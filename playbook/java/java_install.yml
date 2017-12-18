@@ -1,4 +1,4 @@
-- hosts: master
+- hosts: master:nodes
   sudo: true
   tasks:
     # - name: Download jdk

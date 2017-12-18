@@ -1,4 +1,4 @@
-- hosts: master
+- hosts: master:nodes
   sudo: true
   tasks:
      - name: install curl
@@ -7,9 +7,3 @@
 - include: java/java_install.yml
 - include: wildfly/wildfly.yml
 #- include: jenkins/jenkins_install.yml
-
-# - hosts: master:nodes
-#   sudo: true
-#   tasks:
-#     - name: install vim
-#       apt: name=vim state=present
