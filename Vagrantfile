@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "src/jdk_src", "/jdk_src"
   config.vm.synced_folder "src/jre_src", "/jre_src" 
   config.vm.synced_folder "cfg", "/config"
+  config.vm.network :public_network
   config.vbguest.auto_update = true
 
   config.vm.define "myserver1" do |myserver1|
@@ -39,4 +40,3 @@ Vagrant.configure("2") do |config|
   end
 
 end
-

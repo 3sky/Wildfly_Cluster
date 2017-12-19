@@ -3,12 +3,12 @@
   tasks:
     - name: Download wildly.9
       get_url:
-        url: http://download.jboss.org/wildfly/9.0.0.Final/servlet/wildfly-servlet-9.0.0.Final.tar.gz
-        dest: /wild_src/wildfly-servlet-9.0.0.Final.tar.gz
+        url: http://download.jboss.org/wildfly/9.0.1.Final/wildfly-9.0.1.Final.tar.gz
+        dest: /wild_src/wildfly-9.0.1.Final.tar.gz
 
     - name: Extract Wildfly
       unarchive:
-        src: /wild_src/wildfly-servlet-9.0.0.Final.tar.gz
+        src: /wild_src/wildfly-9.0.1.Final.tar.gz
         dest: /opt/
 
     - name: Add group "wildfly"
@@ -22,19 +22,19 @@
 
     - name: Create /domain/log
       file: 
-        path: /opt/wildfly-servlet-9.0.0.Final/domain/log
+        path: /opt/wildfly-9.0.1.Final/domain/log
         state: directory
         owner: wildfly
 
     - name: Create /domain/servers
       file: 
-        path: /opt/wildfly-servlet-9.0.0.Final/domain/servers
+        path: /opt/wildfly-9.0.1.Final/domain/servers
         state: directory
         owner: wildfly    
     
     - name: Change ownership of Wildlfy installation
       file: 
-        path:  /opt/wildfly-servlet-9.0.0.Final/
+        path:  /opt/wildfly-9.0.1.Final/
         owner: wildfly 
         group: wildfly 
         state: directory 
@@ -42,19 +42,19 @@
 
     - name: Edit init script
       replace:
-        name: /opt/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh
+        name: /opt/wildfly-9.0.1.Final/bin/init.d/wildfly-init-debian.sh
         regexp: 'JBOSS_MODE=standalone'
         replace: 'JBOSS_MODE=domain'
 
     - name: Copy the init script
       copy: 
-        src: /opt/wildfly-servlet-9.0.0.Final/bin/init.d/wildfly-init-debian.sh 
+        src: /opt/wildfly-9.0.1.Final/bin/init.d/wildfly-init-debian.sh 
         dest: /etc/init.d/wildfly 
         mode: 0755    
 
     - name: Create symlink
       file: 
-        src: /opt/wildfly-servlet-9.0.0.Final 
+        src: /opt/wildfly-9.0.1.Final 
         dest: /opt/wildfly
         state: link
         force: true
@@ -71,13 +71,21 @@
         dest: /opt/wildfly/domain/configuration/host.xml 
         mode: 0755
 
-    - name: Add user admin
+    - name: Add user admin/slave
       lineinfile:
         dest: /opt/wildfly/domain/configuration/mgmt-users.properties
         line: "{{ item.line }}"
       with_items:
         - { line: 'admin=8b719b83947927205e7f4969a4c8514e' }
         - { line: 'slave=8a2a93e7cfefaa1a3ca0d69dfd3e692b' }
+
+    - name: Add group admin/slave
+      lineinfile:
+        dest: /opt/wildfly/domain/configuration/mgmt-groups.properties
+        line: "{{ item.line }}"
+      with_items:
+        - { line: 'admin=' }
+        - { line: 'slave=' }        
 
 - hosts: myserver2
   sudo: true
